@@ -1,8 +1,8 @@
-// api/chat.js
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import axios from 'axios';
-import { randomUUID } from 'crypto';
-import https from 'https';
+// 使用 require 替代 import
+const { VercelRequest, VercelResponse } = require('@vercel/node');
+const axios = require('axios');
+const { randomUUID } = require('crypto');
+const https = require('https');
 
 // 环境变量或硬编码值
 const baseUrl = process.env.BASE_URL || "https://chat.openai.com";
@@ -27,7 +27,8 @@ const axiosInstance = axios.create({
   },
 });
 
-module.exports = async (req: VercelRequest, res: VercelResponse) => {
+// 导出 module.exports 以用于 Vercel Serverless 函数
+module.exports = async (req, res) => {
   if (req.method === 'POST') {
     const oaiDeviceId = randomUUID();
     const token = process.env.OAI_TOKEN; // 假设你的 OpenAI 令牌存储在环境变量中
