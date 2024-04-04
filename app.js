@@ -5,7 +5,7 @@ const https = require("https");
 const { randomUUID } = require("crypto");
 
 // Constants for the server and API configuration
-const port = 3040;
+const port = 443;
 const baseUrl = "https://chat.openai.com";
 const apiUrl = `${baseUrl}/backend-api/conversation`;
 const refreshInterval = 60000; // Interval to refresh token in ms
