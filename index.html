@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with OpenAI</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #response { margin-top: 20px; padding: 10px; background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h2>与OpenAI聊天</h2>
+    <label for="message">输入消息：</label>
+    <input type="text" id="message" placeholder="你好, OpenAI">
+    <button id="send">发送</button>
+    
+    <div id="response"></div>
+    
+    <script>
+        document.getElementById('send').onclick = async function() {
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+            const responseContainer = document.getElementById('response');
+            
+            // 清除上一次的响应
+            responseContainer.innerHTML = '';
+
+            if (message) {
+                try {
+                    // 发送POST请求到服务器
+                    const response = await fetch('https://free-gpt-35-test.vercel.app:3401/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            messages: [{role: 'user', content: message}],
+                            stream: false  // 根据需要调整，是否启用流式响应
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        responseContainer.textContent = data.choices[0].message.content;
+                    } else {
+                        throw new Error('服务器错误');
+                    }
+                } catch (error) {
+                    console.error('请求失败:', error);
+                    responseContainer.textContent = '请求失败，请检查控制台了解详细信息。';
+                }
+            } else {
+                responseContainer.textContent = '请输入消息。';
+            }
+        };
+    </script>
+</body>
+</html>
